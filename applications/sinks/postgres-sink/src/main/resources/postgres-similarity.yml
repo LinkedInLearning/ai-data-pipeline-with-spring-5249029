@@ -1,0 +1,11 @@
+sql:
+  consumer:
+    sql: >
+      insert into customer.customer_similarities
+        (
+          customer_id, similarities )
+      values (
+          :id, :similaritiesPayload::json) 
+        on CONFLICT (customer_id) 
+      DO UPDATE SET 
+          similarities = :similaritiesPayload::json

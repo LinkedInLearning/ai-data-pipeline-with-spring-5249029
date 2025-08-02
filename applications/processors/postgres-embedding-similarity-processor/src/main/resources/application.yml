@@ -1,0 +1,30 @@
+server:
+  port: 0
+spring:
+  application:
+    name: postgres-embedding-similarity-processor
+  cloud:
+    function:
+      definition: embeddingSimilarityFunction
+    stream:
+      function:
+        bindings:
+          embeddingSimilarityFunction-in-0: input
+          embeddingSimilarityFunction-out-0: output
+      binder:
+        connection-name-prefix: ${spring.application.name}
+      bindings:
+        input:
+          group: postgres-embedding-similarity-processor
+  ai:
+    vectorstore:
+      pgvector:
+        idType: TEXT
+        initialize-schema: true
+  jpa:
+    show-sql: true
+logging:
+  level:
+    org:
+      springframework:
+        ai: debug

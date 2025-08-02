@@ -4,8 +4,8 @@
                              http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.vmware</groupId>
-	<artifactId>ai-data-pipeline-with-spring-showcase</artifactId>
+	<groupId>ai.data.pipeline.spring</groupId>
+	<artifactId>ai-data-pipeline-with-spring</artifactId>
 	<packaging>pom</packaging>
 	<version>1.0</version>
 	<name>ai-data-pipeline-with-spring-showcase</name>
@@ -14,6 +14,7 @@
 		<module>applications/sinks/postgres-sink</module>
 		<module>applications/processors/postgres-query-processor</module>
 		<module>applications/processors/ai-sentiment-processor</module>
+		<module>applications/processors/ai-sentiment-rag-processor</module>
 		<module>applications/processors/postgres-embedding-similarity-processor</module>
 	</modules>
 	<build>

@@ -1,0 +1,8 @@
+query:
+  processor:
+    sql: >
+      SELECT 
+        :id as id,
+        :email as email,
+        :feedback as feedback,
+        pgml.transform( task => '{ "task": "summarization", "model": "Falconsai/text_summarization"}'::JSONB, inputs => array[ :feedback])::json->0->>'summary_text' as summary;

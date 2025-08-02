@@ -1,0 +1,39 @@
+server:
+  port: 0
+spring:
+  application:
+    name: ai-sentiment-processor
+  cloud:
+    function:
+      definition: customerFeedbackSentimentProcessor
+    stream:
+      function:
+        bindings:
+          customerFeedbackSentimentProcessor-in-0: input
+          customerFeedbackSentimentProcessor-out-0: output
+      binder:
+        connection-name-prefix: ${spring.application.name}
+      bindings:
+        input:
+          group: ai-sentiment-processor
+  ai:
+    ollama:
+      base-url: http://localhost:11434
+      model: llama3
+      init:
+        pull-model-strategy: always
+        timeout: 60s
+        max-retries: 1
+    vectorstore:
+      pgvector:
+        idType: TEXT
+        initialize-schema: true
+        dimensions: 1024
+    #
+  jpa:
+    show-sql: true
+logging:
+  level:
+    org:
+      springframework:
+        ai: debug

@@ -1,0 +1,23 @@
+sql:
+  consumer:
+    sql: >
+      insert into customer.feedback
+        (
+          feed_id,
+          email,
+          user_feedback,
+          summary, 
+          sentiment) 
+      values (
+          :payload::json->'customerFeedback'->'id',
+          :payload::json->'customerFeedback'->'email',
+          :payload::json->'customerFeedback'->'feedback',
+          :payload::json->'customerFeedback'->'summary',
+          :sentiment
+          ) 
+        on CONFLICT (feed_id) 
+      DO UPDATE SET 
+          email = :payload::json->'customerFeedback'->'email', 
+          user_feedback = :payload::json->'customerFeedback'->'feedback',  
+          summary = :payload::json->'customerFeedback'->'summary',
+          sentiment = :sentiment

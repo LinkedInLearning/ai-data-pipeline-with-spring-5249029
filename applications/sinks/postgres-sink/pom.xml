@@ -8,7 +8,7 @@
 		<version>3.5.0</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>showcase.ai.data.pipeline.spring</groupId>
+	<groupId>ai.data.pipeline.spring</groupId>
 	<artifactId>postgres-sink</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>postgres-sink</name>

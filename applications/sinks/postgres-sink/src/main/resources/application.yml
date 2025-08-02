@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: postgres-sink
+  datasource:
+    driverClassName: "org.postgresql.Driver"
+  jpa:
+    show-sql: true
+  cloud:
+    function:
+      definition: postgresConsumer
+    stream:
+      function:
+        bindings:
+          postgresConsumer-in-0: input
+          postgresConsumer-out-0: output
+      rabbit:
+        binder:
+          connection-name-prefix: ${spring.application.name}
+        bindings:
+          input:
+            consumer:
+              autoBindDlq: true
+            #
+      bindings:
+        input:
+          group: postgres-sink
+server:
+  port: 8003
