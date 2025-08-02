@@ -13,11 +13,16 @@ docker run -it --name rabbitmq   --rm  -p 5672:5672 -p 15672:15672  rabbitmq:4.1
 Run Postgres
 
 ```shell
-docker run --name postgresql --network data-pipeline --rm  -e POSTGRESQL_USERNAME=postgres -e ALLOW_EMPTY_PASSWORD=true -e POSTGRESQL_DATABASE=postgres -p 5432:5432 bitnami/postgresql:latest 
+docker run --name postgres --network data-pipelines --rm  \
+  -e POSTGRES_USER=postgres \
+  -e POSTGRES_PASSWORD=postgres \
+  -e POSTGRES_DB=postgres \
+  -p 5432:5432 \
+  -it postgres   
 ```
 
 ```shell
-docker exec -it postgresql psql -U postgres
+docker exec -it postgres psql -U postgres
 ```
 
 

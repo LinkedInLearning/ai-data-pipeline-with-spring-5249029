@@ -13,5 +13,8 @@ spring:
         bindings:
           queryFunctionProcessor-in-0: input
           queryFunctionProcessor-out-0: output
+      bindings:
+        input:
+          group: ${spring.application.name}
       binder:
         connection-name-prefix: ${spring.application.name}

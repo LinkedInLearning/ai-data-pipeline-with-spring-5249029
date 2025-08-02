@@ -8,7 +8,12 @@ Run Postgres
 
 ```shell
 ```shell
-docker run --name postgresql --network data-pipelines --rm  -e POSTGRESQL_USERNAME=postgres -e ALLOW_EMPTY_PASSWORD=true -e POSTGRESQL_DATABASE=postgres -p 5432:5432 bitnami/postgresql:latest
+docker run --name postgres --network data-pipelines --rm  \
+  -e POSTGRES_USER=postgres \
+  -e POSTGRES_PASSWORD=postgres \
+  -e POSTGRES_DB=postgres \
+  -p 5432:5432 \
+  -it postgres   
 ```
 
 
@@ -17,9 +22,7 @@ docker run --name postgresql --network data-pipelines --rm  -e POSTGRESQL_USERNA
 psql
 
 ```shell
-docker run --name psql -it --rm \
---network data-pipelines \
-    bitnami/postgresql:latest psql -h postgresql -U postgres
+docker exec -it postgres psql -U postgres
 ```
 
 ```shell

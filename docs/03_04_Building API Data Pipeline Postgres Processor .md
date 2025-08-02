@@ -11,14 +11,17 @@ docker run -it --name rabbitmq   --rm  -p 5672:5672 -p 15672:15672  rabbitmq:4.1
 
 Postgres
 ```shell
-docker run --name postgresql --network data-pipelines --rm  -e POSTGRESQL_USERNAME=postgres -e ALLOW_EMPTY_PASSWORD=true -e POSTGRESQL_DATABASE=postgres -p 5432:5432 bitnami/postgresql:latest 
+docker run --name postgres --network data-pipelines --rm  \
+  -e POSTGRES_USER=postgres \
+  -e POSTGRES_PASSWORD=postgres \
+  -e POSTGRES_DB=postgres \
+  -p 5432:5432 \
+  -it postgres  
 ```
 
 
 ```shell
-docker run --name psql -it --rm \
---network data-pipelines \
-    bitnami/postgresql:latest psql -h postgresql -U postgres
+docker exec -it postgres psql -U postgres
 ```
 
 
@@ -50,10 +53,10 @@ java -jar runtime/http-source-rabbit-5.0.1.jar --http.supplier.pathPattern=custo
 ```
 
 
-Start Processor
+Start Processor customer information formatting
 
 ```shell
-java -jar applications/processors/postgres-query-processor/target/postgres-query-processor-0.0.1-SNAPSHOT.jar --query.processor.sql="select :email as email,initcap(:firstname) as firstname,initcap(:lastname) as lastname,:phone as phone,:address as address,:city as city,:state as state,:zip as zip" --spring.datasource.username=postgres --spring.datasource.url="jdbc:postgresql://localhost/postgres" --spring.datasource.driverClassName=org.postgresql.Driver --spring.cloud.stream.bindings.input.destination=customers.input.formatting --spring.cloud.stream.bindings.output.destination=customers.output.formatting
+java -jar applications/processors/postgres-query-processor/target/postgres-query-processor-0.0.1-SNAPSHOT.jar --query.processor.sql="select :email as email,initcap(:firstname) as firstname,initcap(:lastname) as lastname,:phone as phone,:address as address,:city as city,:state as state,:zip as zip" --spring.datasource.username=postgres --spring.datasource.url="jdbc:postgresql://localhost/postgres" --spring.datasource.driverClassName=org.postgresql.Driver --spring.cloud.stream.bindings.input.destination=customers.input.formatting --spring.cloud.stream.bindings.output.destination=customers.output.formatting --spring.datasource.password=postgres
 ```
 
 Start Sink

@@ -8,9 +8,6 @@ docker run -it --name rabbitmq   --rm  -p 5672:5672 -p 15672:15672  rabbitmq:4.1
 ```
 
 
-
-
-
 ```shell
 open http://localhost:15672
 ```
@@ -21,6 +18,7 @@ Download http source
 wget -P runtime https://repo.maven.apache.org/maven2/org/springframework/cloud/stream/app/http-source-rabbit/5.0.1/http-source-rabbit-5.0.1.jar
 ```
 
+Run the Http Source 
 ```shell
 java -jar runtime/http-source-rabbit-5.0.1.jar --http.supplier.pathPattern=customers --server.port=8080 --spring.cloud.stream.bindings.output.destination=customers.intake
 ```

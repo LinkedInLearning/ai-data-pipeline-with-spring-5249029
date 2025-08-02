@@ -17,7 +17,7 @@ ollama run llama3
 
 ```text
 Analyze the sentiment of this text: "I really love long wait".
-            Respond with only one word: Positive, Neutral, or Negative, taking into account the provided context.
+            Respond with only one word: Positive, or Negative, taking into account the provided context.
 
 Context:
 I REALLY REALLY LOVE LONG LINE is a NEGATIVE sentiment
@@ -26,15 +26,15 @@ I REALLY REALLY LOVE LONG LINE is a NEGATIVE sentiment
 
 ```text
 Analyze the sentiment of this text: "Sure, keep me waiting like I have all DAY".
-            Respond with only one word: Positive, Neutral, or Negative, taking into account the provided context.
+            Respond with only one word: Positive, or Negative, taking into account the provided context.
 
 Context:
 I REALLY REALLY LOVE LONG LINE is a NEGATIVE sentiment
 ```
 
 ```text
-Analyze the sentiment of this text: "Your team is doing a great job to reducing long wait time".
-            Respond with only one word: Positive, Neutral, or Negative, taking into account the provided context.
+Analyze the sentiment of this text: "Your team is doing a great job to reduce long wait time".
+            Respond with only one word: Positive, or Negative, taking into account the provided context.
 
 Context:
 I REALLY REALLY LOVE LONG LINE is a NEGATIVE sentiment
@@ -43,15 +43,11 @@ I REALLY REALLY LOVE LONG LINE is a NEGATIVE sentiment
 
 ```text
 Analyze the sentiment of this text: "Oh great, another update that totally doesn’t break anything. Just what I needed.".
-            Respond with only one word: Positive, Neutral, or Negative, taking into account the provided context.
+            Respond with only one word: Positive, or Negative, taking into account the provided context.
 
 Context:
 I REALLY REALLY LOVE LONG LINE is a NEGATIVE sentiment
 ```
-
-
-Analyze the sentiment of this text: "You know what. It is ok. I love being on hold FOREVER. I will just take by business".
-Respond with only one word: Positive, Neutral, or Negative, taking into account the provided context.
 
 
 Run Rabbit
@@ -69,11 +65,16 @@ docker run -it --name rabbitmq   --rm  -p 5672:5672 -p 15672:15672  rabbitmq:4.1
 Run Postgres
 
 ```shell
-docker run --name postgresql --network data-pipeline --rm  -e POSTGRESQL_USERNAME=postgres -e ALLOW_EMPTY_PASSWORD=true -e POSTGRESQL_DATABASE=postgres -p 5432:5432 bitnami/postgresql:latest 
+docker run --name postgres --network data-pipelines --rm  \
+  -e POSTGRES_USER=postgres \
+  -e POSTGRES_PASSWORD=postgres \
+  -e POSTGRES_DB=postgres \
+  -p 5432:5432 \
+  -it postgres    
 ```
 
 ```shell
-docker exec -it postgresql psql -U postgres
+docker exec -it postgres psql -U postgres
 ```
 
 

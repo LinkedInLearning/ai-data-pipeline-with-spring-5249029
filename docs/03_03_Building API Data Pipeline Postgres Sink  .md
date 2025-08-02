@@ -9,20 +9,28 @@ docker network create data-pipelines
 docker run -it --name rabbitmq   --rm  -p 5672:5672 -p 15672:15672  rabbitmq:4.1.0-management 
 ```
 
+Run the Http Source
 ```shell
-docker run -it --name postgresql  --network data-pipelines --rm  -e POSTGRESQL_USERNAME=postgres -e POSTGRES_PASSWORD=postgres -p 5432:5432 postgres
+java -jar runtime/http-source-rabbit-5.0.1.jar --http.supplier.pathPattern=customers --server.port=8080 --spring.cloud.stream.bindings.output.destination=customers.intake
+```
+
+Start Postgres
+
+```shell
+docker run --name postgres --network data-pipelines --rm  \
+  -e POSTGRES_USER=postgres \
+  -e POSTGRES_PASSWORD=postgres \
+  -e POSTGRES_DB=postgres \
+  -p 5432:5432 \
+  -it postgres   
 ```
 
 
 psql 
 
 ```shell
-docker run --name psql -it --rm \
---network data-pipelines \
-    postgres psql -h postgresql -U postgres
+docker exec -it postgres psql -U postgres
 ```
-
-
 
 ```sql
 create schema customer;
