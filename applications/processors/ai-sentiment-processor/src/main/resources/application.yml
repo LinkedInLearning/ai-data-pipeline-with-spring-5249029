@@ -24,12 +24,6 @@ spring:
         pull-model-strategy: always
         timeout: 60s
         max-retries: 1
-    vectorstore:
-      pgvector:
-        idType: TEXT
-        initialize-schema: true
-        dimensions: 1024
-    #
   jpa:
     show-sql: true
 logging:

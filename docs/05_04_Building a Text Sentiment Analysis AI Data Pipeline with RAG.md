@@ -1,3 +1,59 @@
+
+
+```shell
+ollama serve
+```
+
+pull and run a model like this:
+
+```shell
+ollama run llama3
+```
+
+```text
+ Analyze the sentiment of this text: "I REALLY REALLY LOVE LONG LINE". Respond with only one word: Positive or Negative.
+
+```
+
+```text
+Analyze the sentiment of this text: "I really love long wait".
+            Respond with only one word: Positive, Neutral, or Negative, taking into account the provided context.
+
+Context:
+I REALLY REALLY LOVE LONG LINE is a NEGATIVE sentiment
+```
+
+
+```text
+Analyze the sentiment of this text: "Sure, keep me waiting like I have all DAY".
+            Respond with only one word: Positive, Neutral, or Negative, taking into account the provided context.
+
+Context:
+I REALLY REALLY LOVE LONG LINE is a NEGATIVE sentiment
+```
+
+```text
+Analyze the sentiment of this text: "Your team is doing a great job to reducing long wait time".
+            Respond with only one word: Positive, Neutral, or Negative, taking into account the provided context.
+
+Context:
+I REALLY REALLY LOVE LONG LINE is a NEGATIVE sentiment
+```
+
+
+```text
+Analyze the sentiment of this text: "Oh great, another update that totally doesn’t break anything. Just what I needed.".
+            Respond with only one word: Positive, Neutral, or Negative, taking into account the provided context.
+
+Context:
+I REALLY REALLY LOVE LONG LINE is a NEGATIVE sentiment
+```
+
+
+Analyze the sentiment of this text: "You know what. It is ok. I love being on hold FOREVER. I will just take by business".
+Respond with only one word: Positive, Neutral, or Negative, taking into account the provided context.
+
+
 Run Rabbit
 
 ```shell
@@ -49,27 +105,12 @@ docker run --rm --name postgresml \
 ```
 
 
+Drop d
 
-Start Ollama
-
-```shell
-ollama serve
+```sql
+drop table vector_store;
 ```
 
-pull and run a model like this:
-
-```shell
-ollama run llama3
-```
-
-Test with llama3 model with the following
-
-```shell
-Analyze the sentiment of this text: "Hello my name is John Smith. I am long time customer. It seems that every time I call the help desk there is a very long wait . When I follow get someone on the line, I have the repeat to repeat the process of the provide the details.".
-            Respond with only one word: Positive or Negative.
-```
-
----------------------------
 
 
 Start Http
@@ -88,9 +129,8 @@ java -jar applications/processors/postgres-query-processor/target/postgres-query
 Start Processor Text sentiment
 
 ```shell
-java -jar applications/processors/ai-sentiment-processor/target/ai-sentiment-processor-0.0.1-SNAPSHOT.jar --spring.cloud.stream.bindings.input.destination=customers.output.feedback.summary --spring.cloud.stream.bindings.output.destination=customers.output.feedback.sentiment
+java -jar applications/processors/ai-sentiment-processor/target/ai-sentiment-processor-0.0.1-SNAPSHOT.jar --spring.cloud.stream.bindings.input.destination=customers.output.feedback.summary --spring.cloud.stream.bindings.output.destination=customers.output.feedback.sentiment --spring.datasource.username=postgres --spring.datasource.driverClassName=org.postgresql.Driver --spring.datasource.url="jdbc:postgresql://localhost:6432/postgresml" 
 ```
-
 
 
 Start Sink
@@ -100,7 +140,7 @@ Start Sink
 java -jar applications/sinks/postgres-sink/target/postgres-sink-0.0.1-SNAPSHOT.jar --spring.datasource.username=postgres --spring.datasource.driverClassName=org.postgresql.Driver --spring.datasource.url="jdbc:postgresql://localhost/postgres"  --spring.cloud.stream.bindings.input.destination=customers.output.feedback.sentiment --spring.config.import=optional:file:///Users/Projects/solutions/ai-ml/dev/ai-data-pipeline-with-spring-showcase/applications/sinks/postgres-sink/src/main/resources/postgres-sentiment-analysis-ollama.yml --spring.cloud.stream.bindings.input.group=postgres-sink
 ```
 
-
+Sure, keep me waiting like I have all DAY
 
 ```shell
 curl -X 'POST' \
@@ -108,9 +148,9 @@ curl -X 'POST' \
   -H 'accept: */*' \
   -H 'Content-Type: application/json' \
   -d '{
-  "id" : "F001",
+  "id" : "S001",
   "email" : "jmatthews@email",
-  "feedback" : "Hello my name is John Smith. I am long time customer. It seems that every time I call the help desk there is a very long wait. Then when I following get someone on the line, I have the repeat to repeat the process of the provide the details. This is very disappointing."
+  "feedback" : "You know what. It is ok. I love being on hold FOREVER. I will just take by business"
 }'
 ```
 

@@ -8,7 +8,6 @@ import lombok.Builder;
 public record FeedbackSentiment(Sentiment sentiment,CustomerFeedback customerFeedback) {
     public enum Sentiment{
         Positive,
-        Negative,
-        Neutral
+        Negative
     }
 }

@@ -35,7 +35,7 @@ create table customer.feedback(
 );
 ```
 
-Run PostgresML (used by the text summary processor)
+Run PostgresML
 
 ```shell
 docker run --rm --name postgresml \
@@ -47,6 +47,7 @@ docker run --rm --name postgresml \
     ghcr.io/postgresml/postgresml:2.10.0 \
     sudo -u postgresml psql -d postgresml
 ```
+
 
 
 Start Ollama
@@ -64,7 +65,7 @@ ollama run llama3
 Test with llama3 model with the following
 
 ```shell
-Analyze the sentiment of this text: "Hello my name is John Smith. I am long time customer. It seems that every time I call the help desk there is a very long wait . When I finally get someone on the line, I have the repeat the process of the provide my details.".
+Analyze the sentiment of this text: "Hello my name is John Smith. I am long time customer. It seems that every time I call the help desk there is a very long wait . When I follow get someone on the line, I have the repeat to repeat the process of the provide the details.".
             Respond with only one word: Positive or Negative.
 ```
 
@@ -72,6 +73,7 @@ Analyze the sentiment of this text: "Hello my name is John Smith. I am long time
 
 
 Start Http
+
 
 ```shell
 java -jar runtime/http-source-rabbit-5.0.1.jar --http.supplier.pathPattern=feedback --server.port=8094 --spring.cloud.stream.bindings.output.destination=customers.input.feedback
@@ -83,7 +85,7 @@ Start Processor Text Summary
 ```shell
 java -jar applications/processors/postgres-query-processor/target/postgres-query-processor-0.0.1-SNAPSHOT.jar --spring.datasource.username=postgres --spring.datasource.url="jdbc:postgresql://localhost:6432/postgresml" --spring.datasource.driverClassName=org.postgresql.Driver --spring.cloud.stream.bindings.input.destination=customers.input.feedback --spring.cloud.stream.bindings.output.destination=customers.output.feedback.summary --spring.config.import=optional:file:///Users/Projects/solutions/ai-ml/dev/ai-data-pipeline-with-spring-showcase/applications/processors/postgres-query-processor/src/main/resources/text-summarization.yml --spring.datasource.hikari.max-lifetime=600000 --spring.cloud.stream.bindings.input.group=postgres-query-processor
 ```
-Start Sentiment Analysis Processor
+Start Processor Text sentiment
 
 ```shell
 java -jar applications/processors/ai-sentiment-processor/target/ai-sentiment-processor-0.0.1-SNAPSHOT.jar --spring.cloud.stream.bindings.input.destination=customers.output.feedback.summary --spring.cloud.stream.bindings.output.destination=customers.output.feedback.sentiment
@@ -91,7 +93,7 @@ java -jar applications/processors/ai-sentiment-processor/target/ai-sentiment-pro
 
 
 
-Start Postgres Sink 
+Start Sink
 
 
 ```shell
@@ -119,10 +121,3 @@ In psql
 select * from customer.feedback;
 
 ```
-
-
------------------
-
-DeLETE
-
-
