@@ -1,3 +1,10 @@
+Run RabbitMQ
+ 
+```shell
+docker run -it --name rabbitmq   --rm  -p 5672:5672 -p 15672:15672  rabbitmq:4.1.0-management 
+```
+
+
 Run Postgres
 
 ```shell
@@ -21,8 +28,7 @@ docker run --rm --name postgresml \
 
 Connect to postgres
 ```shell
-docker run --name psql-pg -it --rm \
---network data-pipelines postgres:latest psql -h postgresql  -U postgres -d postgres
+docker exec -it postgresql psql -U postgres
 ```
 
 
@@ -44,7 +50,6 @@ summary text NOT NULL,
 
 
 
-
 Start Http
 
 
@@ -58,7 +63,7 @@ java -jar runtime/http-source-rabbit-5.0.1.jar --http.supplier.pathPattern=feedb
 Start Processor text summarization
 
 ```shell
-java -jar applications/processors/postgres-query-processor/target/postgres-query-processor-0.0.1-SNAPSHOT.jar --spring.datasource.username=postgres --spring.datasource.url="jdbc:postgresql://localhost:6432/postgresml" --spring.datasource.driverClassName=org.postgresql.Driver --spring.cloud.stream.bindings.input.destination=customers.input.feedback --spring.cloud.stream.bindings.output.destination=customers.output.feedback --spring.config.import=optional:file:///Users/Projects/solutions/ai-ml/dev/ai-data-pipeline-with-spring-showcase/applications/processors/postgres-query-processor/src/main/resources/text-summarization.yml --spring.datasource.hikari.max-lifetime=600000 --spring.cloud.stream.bindings.input.group=postgres-query-processor
+java -jar applications/processors/postgres-query-processor/target/postgres-query-processor-0.0.1-SNAPSHOT.jar --spring.datasource.username=postgres --spring.datasource.url="jdbc:postgresql://localhost:6432/postgresml" --spring.datasource.driverClassName=org.postgresql.Driver --spring.datasource.password=postgres --spring.cloud.stream.bindings.input.destination=customers.input.feedback --spring.cloud.stream.bindings.output.destination=customers.output.feedback --spring.config.import=optional:file:///Users/Projects/solutions/ai-ml/dev/ai-data-pipeline-with-spring-showcase/applications/processors/postgres-query-processor/src/main/resources/text-summarization.yml --spring.datasource.hikari.max-lifetime=600000 --spring.cloud.stream.bindings.input.group=postgres-query-processor
 ```
 
 Start Sink
