@@ -22,7 +22,7 @@ docker run --name postgres --network data-pipelines --rm  \
 ```
 
 ```shell
-docker exec -it postgresql psql -U postgres
+docker exec -it postgres psql -U postgres
 ```
 
 
@@ -86,7 +86,7 @@ java -jar runtime/http-source-rabbit-5.0.1.jar --http.supplier.pathPattern=feedb
 Start Processor Text Summary
 
 ```shell
-java -jar applications/processors/postgres-query-processor/target/postgres-query-processor-0.0.1-SNAPSHOT.jar --spring.datasource.username=postgres --spring.datasource.url="jdbc:postgresql://localhost:6432/postgresml" --spring.datasource.driverClassName=org.postgresql.Driver --spring.cloud.stream.bindings.input.destination=customers.input.feedback --spring.cloud.stream.bindings.output.destination=customers.output.feedback.summary --spring.config.import=optional:file:///Users/Projects/solutions/ai-ml/dev/ai-data-pipeline-with-spring-showcase/applications/processors/postgres-query-processor/src/main/resources/text-summarization.yml --spring.datasource.hikari.max-lifetime=600000 --spring.cloud.stream.bindings.input.group=postgres-query-processor
+java -jar applications/processors/postgres-query-processor/target/postgres-query-processor-0.0.1-SNAPSHOT.jar --spring.datasource.username=postgres --spring.datasource.password=postgres --spring.datasource.url="jdbc:postgresql://localhost:6432/postgresml" --spring.datasource.driverClassName=org.postgresql.Driver --spring.cloud.stream.bindings.input.destination=customers.input.feedback --spring.cloud.stream.bindings.output.destination=customers.output.feedback.summary --spring.config.import=optional:file:///Users/Projects/solutions/ai-ml/dev/ai-data-pipeline-with-spring-showcase/applications/processors/postgres-query-processor/src/main/resources/text-summarization.yml --spring.datasource.hikari.max-lifetime=600000 --spring.cloud.stream.bindings.input.group=postgres-query-processor
 ```
 Start Sentiment Analysis Processor
 
@@ -100,7 +100,7 @@ Start Postgres Sink
 
 
 ```shell
-java -jar applications/sinks/postgres-sink/target/postgres-sink-0.0.1-SNAPSHOT.jar --spring.datasource.username=postgres --spring.datasource.driverClassName=org.postgresql.Driver --spring.datasource.url="jdbc:postgresql://localhost/postgres"  --spring.cloud.stream.bindings.input.destination=customers.output.feedback.sentiment --spring.config.import=optional:file:///Users/Projects/solutions/ai-ml/dev/ai-data-pipeline-with-spring-showcase/applications/sinks/postgres-sink/src/main/resources/postgres-sentiment-analysis-ollama.yml --spring.cloud.stream.bindings.input.group=postgres-sink
+java -jar applications/sinks/postgres-sink/target/postgres-sink-0.0.1-SNAPSHOT.jar --spring.datasource.username=postgres --spring.datasource.password=postgres --spring.datasource.driverClassName=org.postgresql.Driver --spring.datasource.url="jdbc:postgresql://localhost/postgres"  --spring.cloud.stream.bindings.input.destination=customers.output.feedback.sentiment --spring.config.import=optional:file:///Users/Projects/solutions/ai-ml/dev/ai-data-pipeline-with-spring-showcase/applications/sinks/postgres-sink/src/main/resources/postgres-sentiment-analysis-ollama.yml --spring.cloud.stream.bindings.input.group=postgres-sink
 ```
 
 
@@ -118,9 +118,35 @@ curl -X 'POST' \
 ```
 
 
+```shell
+curl -X 'POST' \
+  'http://localhost:8094/feedback' \
+  -H 'accept: */*' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "id" : "F002",
+  "email" : "jmatthews@email",
+  "feedback" : "I am really disappointed with the wait time I experienced when trying to reach Customer Service. I was on hold for over 40 minutes just to speak with someone about a simple issue with my account. It’s frustrating and honestly unacceptable. If your company values customer satisfaction, you seriously need to hire more reps or improve your response time. I do not have time to sit around waiting all day."
+}'
+```
+
+
+```shell
+curl -X 'POST' \
+  'http://localhost:8094/feedback' \
+  -H 'accept: */*' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "id" : "F003",
+  "email" : "jmatthews@email",
+  "feedback" : "I just wanted to take a moment to recognize the exceptional professionalism of your customer service team. The representative I spoke with was courteous, knowledgeable, and incredibly patient while helping me resolve my issue. It’s rare to find such a high level of service these days, and it truly made a difference in my experience. Kudos to your team!"
+}'
+```
+
+
 In psql
 
 ```sql
-select * from customer.feedback;
+ select sentiment,summary from customer.feedback;
 
 ```
