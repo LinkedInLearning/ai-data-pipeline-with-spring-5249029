@@ -37,7 +37,7 @@ create table customer.customer_similarities(
 ```
 
 
-Run PostgresML
+Run PostgresML with PgVector
 
 ```shell
 docker run --rm --name postgresml \
@@ -50,6 +50,11 @@ docker run --rm --name postgresml \
     sudo -u postgresml psql -d postgresml
 ```
 
+Drop so it be recreated by Spring AI
+
+```sql
+drop table vector_store;
+```
 
 Distance 0
 
@@ -88,7 +93,7 @@ Start Sink
 
 
 ```shell
-java -jar applications/sinks/postgres-sink/target/postgres-sink-0.0.1-SNAPSHOT.jar --spring.datasource.username=postgres --spring.datasource.driverClassName=org.postgresql.Driver --spring.datasource.url="jdbc:postgresql://localhost/postgres"  --spring.cloud.stream.bindings.input.destination="customers.similarities.output" --spring.config.import=optional:file://$PWD/applications/sinks/postgres-sink/src/main/resources/postgres-similarity.yml --spring.cloud.stream.bindings.input.group=postgres-sink
+java -jar applications/sinks/postgres-sink/target/postgres-sink-0.0.1-SNAPSHOT.jar --spring.datasource.username=postgres  --spring.datasource.password=postgres --spring.datasource.driverClassName=org.postgresql.Driver --spring.datasource.url="jdbc:postgresql://localhost/postgres"  --spring.cloud.stream.bindings.input.destination="customers.similarities.output" --spring.config.import=optional:file://$PWD/applications/sinks/postgres-sink/src/main/resources/postgres-similarity.yml --spring.cloud.stream.bindings.input.group=postgres-sink
 ```
 
 ```shell
@@ -110,16 +115,7 @@ curl -X 'POST' \
 ```
 
 
-In psql
 
-```sql
-select customer_id,
- jsonb_array_elements(similarities) ->>'id' as email, 
- jsonb_array_elements(similarities) ->>'text' as text,
- jsonb_array_elements(similarities) ->>'score' as score,
- (jsonb_array_elements(similarities) ->>'metadata')::json ->> 'distance' as distance
-from customer.customer_similarities;
-```
 
 
 ```shell
@@ -140,6 +136,16 @@ curl -X 'POST' \
                 }'
 ```
 
+In psql
+
+```sql
+select customer_id,
+ jsonb_array_elements(similarities) ->>'id' as email, 
+ jsonb_array_elements(similarities) ->>'text' as text,
+ jsonb_array_elements(similarities) ->>'score' as score,
+ (jsonb_array_elements(similarities) ->>'metadata')::json ->> 'distance' as distance
+from customer.customer_similarities;
+```
 
 In PostgresML
 

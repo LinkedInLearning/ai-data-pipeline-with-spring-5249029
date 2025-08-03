@@ -106,7 +106,7 @@ docker run --rm --name postgresml \
 ```
 
 
-Drop d
+Drop so it be recreated by Spring AI
 
 ```sql
 drop table vector_store;
@@ -130,7 +130,7 @@ java -jar applications/processors/postgres-query-processor/target/postgres-query
 Start Processor Text sentiment
 
 ```shell
-java -jar applications/processors/ai-sentiment-processor/target/ai-sentiment-processor-0.0.1-SNAPSHOT.jar --spring.cloud.stream.bindings.input.destination=customers.output.feedback.summary --spring.cloud.stream.bindings.output.destination=customers.output.feedback.sentiment --spring.datasource.username=postgres --spring.datasource.driverClassName=org.postgresql.Driver --spring.datasource.url="jdbc:postgresql://localhost:6432/postgresml" 
+java -jar applications/processors/ai-sentiment-rag-processor/target/ai-sentiment-rag-processor-0.0.1-SNAPSHOT.jar --spring.cloud.stream.bindings.input.destination=customers.output.feedback.summary --spring.cloud.stream.bindings.output.destination=customers.output.feedback.sentiment --spring.datasource.username=postgres --spring.datasource.password=postgres --spring.datasource.driverClassName=org.postgresql.Driver --spring.datasource.url="jdbc:postgresql://localhost:6432/postgresml" 
 ```
 
 
@@ -138,10 +138,10 @@ Start Sink
 
 
 ```shell
-java -jar applications/sinks/postgres-sink/target/postgres-sink-0.0.1-SNAPSHOT.jar --spring.datasource.username=postgres --spring.datasource.driverClassName=org.postgresql.Driver --spring.datasource.url="jdbc:postgresql://localhost/postgres"  --spring.cloud.stream.bindings.input.destination=customers.output.feedback.sentiment --spring.config.import=optional:file:///Users/Projects/solutions/ai-ml/dev/ai-data-pipeline-with-spring-showcase/applications/sinks/postgres-sink/src/main/resources/postgres-sentiment-analysis-ollama.yml --spring.cloud.stream.bindings.input.group=postgres-sink
+java -jar applications/sinks/postgres-sink/target/postgres-sink-0.0.1-SNAPSHOT.jar --spring.datasource.username=postgres --spring.datasource.password=postgres --spring.datasource.driverClassName=org.postgresql.Driver --spring.datasource.url="jdbc:postgresql://localhost/postgres"  --spring.cloud.stream.bindings.input.destination=customers.output.feedback.sentiment --spring.config.import=optional:file:///Users/Projects/solutions/ai-ml/dev/ai-data-pipeline-with-spring-showcase/applications/sinks/postgres-sink/src/main/resources/postgres-sentiment-analysis-ollama.yml --spring.cloud.stream.bindings.input.group=postgres-sink
 ```
 
-Sure, keep me waiting like I have all DAY
+
 
 ```shell
 curl -X 'POST' \
@@ -151,7 +151,7 @@ curl -X 'POST' \
   -d '{
   "id" : "S001",
   "email" : "jmatthews@email",
-  "feedback" : "You know what. It is ok. I love being on hold FOREVER. I will just take by business"
+  "feedback" : "You know what. It is ok. I love being on hold FOREVER. I will just take by business somewhere else."
 }'
 ```
 
@@ -159,6 +159,6 @@ curl -X 'POST' \
 In psql
 
 ```sql
-select * from customer.feedback;
+select sentiment, summary from customer.feedback;
 
 ```
