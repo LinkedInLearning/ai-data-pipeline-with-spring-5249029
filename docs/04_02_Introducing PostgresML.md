@@ -16,30 +16,25 @@ docker run --rm  \
 
 --------------------
 
-Text Summarization
 
-```shell
-SELECT pgml.transform(
-        task => '{
-          "task": "summarization", 
-          "model": "google/pegasus-xsum"
-    }'::JSONB,
-        inputs => array[
-         'I called into the customer support. First of all, I have been a very long customer. I have been faithful and often. I am not appreciative of the level of service that I get. I cannot get access to my information. I just called them to try to get my issue resolved. I just got redirected over and over again. Your system needs to be fixed. I am not happy. I want my money back.'
-        ]
-);
+Test summary in postgresML
+
+
+
+```sql
+SELECT pgml.transform( task => '{ "task": "summarization", "model": "Falconsai/text_summarization"}'::JSONB, inputs => array[ 'I am really disappointed with the wait time I experienced when trying to reach Customer Service. I was on hold for over 40 minutes just to speak with someone about a simple issue with my account. It’s frustrating and honestly unacceptable. I do not have time to sit around waiting all day.'])::json->0->>'summary_text' as summary_text;
 ```
+
 
 
 Text Classification
 
-
 ```shell
-SELECT pgml.transform( task   => 'text-classification', inputs => ARRAY['I love how amazingly simple ML has become!']) AS positivity;
+SELECT pgml.transform( task   => 'text-classification', inputs => ARRAY['I love building linked Learning courses!']) AS positivity;
 ```
 
 Text classification
 
 ```shell
-select positivity->0->'label' from (SELECT pgml.transform( task   => 'text-classification', inputs => ARRAY['I hate doing mundane and thankless tasks. ☹️']) as positivity) positivity;
+select positivity->0->'label' from (SELECT pgml.transform( task   => 'text-classification', inputs => ARRAY['What are these prices so high']) as positivity) positivity;
 ```
