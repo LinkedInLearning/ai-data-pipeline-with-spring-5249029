@@ -11,6 +11,10 @@ import showcase.ai.data.orchestration.scdf.properties.QueryProperties;
 import java.util.Map;
 import java.util.function.Function;
 
+/**
+ * Execute a SQL query based on the input JSON and return JSON of the SQL results
+ * @author Gregory Green
+ */
 @Component
 @RequiredArgsConstructor
 @Slf4j
@@ -25,23 +29,13 @@ public class QueryFunctionProcessor implements Function<String,String> {
     public String apply(String payload) {
 
         log.info("payload: {}",payload);
-        var map = objectMapper.readValue(payload, Map.class);
-
-
         var inputMap  = objectMapper.readValue(payload, Map.class);
-        inputMap.put("payload",payload);
 
         log.info("SQL: {}, input: {}",queryProperties,inputMap);
 
         var outMap = namedParameterJdbcTemplate.queryForMap(queryProperties.getSql(),
                 inputMap);
         log.info("SQL: {}, class:{}, results: {}",queryProperties,outMap.getClass(),outMap);
-
-        if(outMap.size() == 1 && outMap.containsKey("payload")) {
-            var outPayload = String.valueOf(outMap.get("payload"));
-            log.info("Returning payload: {}",outPayload);
-            return outPayload;
-        }
 
         var out = objectMapper.writeValueAsString(outMap);
         log.info("Returning: {}",out);

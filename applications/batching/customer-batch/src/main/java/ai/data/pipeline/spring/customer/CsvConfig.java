@@ -10,6 +10,11 @@ import org.springframework.core.io.Resource;
 import java.io.IOException;
 import java.nio.file.Files;
 
+/**
+ * @author Gregory Green
+ *
+ * CSV writer configuration
+ */
 @Configuration
 @Slf4j
 public class CsvConfig {

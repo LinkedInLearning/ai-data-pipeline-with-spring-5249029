@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
-import ai.data.pipeline.spring.data.Customer;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -36,7 +35,7 @@ class PostgresConsumerTest {
     static void beforeAll() {
         System.setProperty(
                 "sql.consumer.sql",
-                "insert into customers(email,first_name) values(:email,:firstName)");
+                "insert into customers(email,first_name) values(:email,:first_name)");
     }
 
     @BeforeEach
@@ -50,7 +49,7 @@ class PostgresConsumerTest {
     @Test
     void accept() throws JsonProcessingException {
         String payload = """
-                { "email" : "${email}" ,  "firstName" : "${firstName}" }
+                { "email" : "${email}" ,  "first_name" : "${first_name}" }
                 """;
 
         payload = Text.format(payload, JavaBean.toMap(customer));
@@ -62,7 +61,7 @@ class PostgresConsumerTest {
 
         var name = jdbcTemplate.queryForObject(query, String.class, customer.getEmail());
 
-        assertThat(name).isEqualTo(customer.getFirstName());
+        assertThat(name).isEqualTo(customer.getFirst_name());
 
     }
 }

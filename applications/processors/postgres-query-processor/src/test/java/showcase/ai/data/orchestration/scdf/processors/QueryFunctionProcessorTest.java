@@ -14,12 +14,13 @@ import org.springframework.util.LinkedCaseInsensitiveMap;
 import showcase.ai.data.orchestration.scdf.properties.QueryProperties;
 
 import javax.sql.DataSource;
-import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
-
+/**
+ * @author Gregory Green
+ */
 @SpringBootTest
 @SpringJUnitConfig
 @SpringRabbitTest

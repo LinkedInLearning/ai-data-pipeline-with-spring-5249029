@@ -32,6 +32,12 @@ import ai.data.pipeline.spring.customer.mapper.CustomerFieldMapper;
 
 import javax.sql.DataSource;
 
+/**
+ * @author Gregory Green
+ *
+ * Spring configuration for laucning the Spring batch application
+ *
+ */
 @Configuration
 @EnableAutoConfiguration(exclude = {BatchAutoConfiguration.class})
 @Slf4j
@@ -40,7 +46,6 @@ public class BatchConfig {
     @Value("${spring.batch.chuck.size:10}")
     private int chunkSize;
 
-    //INSERT INTO customer.customers (first_name, last_name,email) VALUES (:firstName, :lastName, :contact.email)
     private static final String saveSql = """
         insert into customer.customers(email,first_name,last_name,phone,address,city,state,zip) 
         values (:contact.email,
@@ -95,6 +100,12 @@ public class BatchConfig {
         return jobLauncher;
     }
 
+    /**
+     * Creates a Spring Job based on the given step
+     * @param jobRepository the job repository provided by Spring Batch
+     * @param step the Job step
+     * @return the create job
+     */
     @Bean
     public Job job(JobRepository jobRepository,
                    Step step){
@@ -105,7 +116,11 @@ public class BatchConfig {
     }
 
 
-
+    /**
+     * Construct a reader to read the customer information from an CSV file
+     * @param mapper the customer field mapp
+     * @return the reader
+     */
     @Bean
     public FlatFileItemReader<Customer> reader(CustomerFieldMapper mapper) {
         return new FlatFileItemReaderBuilder<Customer>()
@@ -120,6 +135,11 @@ public class BatchConfig {
                 .build();
     }
 
+    /**
+     * Construct a batch writer to insert customer records
+     * @param dataSource the JDBC datasource
+     * @return the JDBC writer
+     */
     @Bean
     public JdbcBatchItemWriter<Customer> writer(DataSource dataSource) {
 
@@ -130,6 +150,15 @@ public class BatchConfig {
                 .build();
     }
 
+    /**
+     * Create the step based on the provided reader, processor and writer
+     * @param itemReader the customer record item reader
+     * @param processor the process for each customer record
+     * @param writer the database writer
+     * @param jobRepository the Spring Batch job repository
+     * @param transactionManager the transaction manager
+     * @return the created step
+     */
     @Bean
     public Step loadCustomerStep(ItemReader<Customer> itemReader,
                                  ItemProcessor<Customer, Customer> processor,
@@ -143,6 +172,5 @@ public class BatchConfig {
                 .writer(writer)
                 .build();
     }
-
 
 }

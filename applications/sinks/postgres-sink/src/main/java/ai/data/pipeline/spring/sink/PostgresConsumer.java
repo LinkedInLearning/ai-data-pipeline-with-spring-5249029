@@ -10,6 +10,10 @@ import org.springframework.stereotype.Component;
 import java.util.Map;
 import java.util.function.Consumer;
 
+/**
+ * Save data into the Postgres databases based a provided paylod
+ * @author Gregory Green
+ */
 @Component
 @Slf4j
 public class PostgresConsumer implements Consumer<String> {
