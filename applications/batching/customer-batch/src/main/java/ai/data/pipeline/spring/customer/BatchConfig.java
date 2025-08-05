@@ -74,7 +74,6 @@ public class BatchConfig {
     //The name of the JOB
     private final static String jobName = "load-customer";
 
-
     /**
      * Create the step based on the provided reader, processor and writer
      * @param itemReader the customer record item reader
@@ -140,7 +139,7 @@ public class BatchConfig {
      * @return the job launch
      */
     @Bean
-    public JobLauncher batchJobLauncher(@Qualifier("resourcelessJobRepository") JobRepository jobRepository,
+    public JobLauncher batchJobLauncher(@Qualifier("jobRepository") JobRepository jobRepository,
                                    TaskExecutor taskExecutor) {
         var jobLauncher = new TaskExecutorJobLauncher();
         jobLauncher.setJobRepository(jobRepository);
@@ -172,12 +171,12 @@ public class BatchConfig {
      * @return the job repository
      */
     @Bean
-    ResourcelessJobRepository resourcelessJobRepository()
+    JobRepository jobRepository()
     {
+        //return an in-memory job repository
         return new ResourcelessJobRepository();
 
     }
-
 
 
 }

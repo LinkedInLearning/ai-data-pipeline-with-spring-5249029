@@ -4,8 +4,6 @@ docker network create data-pipelines
 
 Start Postgres
 
-
-
 ```shell
 docker run --name postgres --network data-pipelines --rm  \
   -e POSTGRES_USER=postgres \
@@ -15,13 +13,30 @@ docker run --name postgres --network data-pipelines --rm  \
   -it postgres 
 ```
 
-```shell
-docker exec -it postgres psql -U postgres
-```
+
+See
+
+[Customer.java](../applications/batching/customer-batch/src/main/java/ai/data/pipeline/spring/customer/domain/Customer.java)
 
 See
 
 [BatchConfig.java](../applications/batching/customer-batch/src/main/java/ai/data/pipeline/spring/customer/BatchConfig.java)
+
+See
+
+[CustomerFieldMapper.java](../applications/batching/customer-batch/src/main/java/ai/data/pipeline/spring/customer/mapper/CustomerFieldMapper.java)
+
+See 
+
+[MissingRequiredFieldsFilterProcessor.java](../applications/batching/customer-batch/src/main/java/ai/data/pipeline/spring/customer/processor/MissingRequiredFieldsFilterProcessor.java)
+
+
+
+Access Postgres using psql
+
+```shell
+docker exec -it postgres psql -U postgres
+```
 
 Run batch
 
@@ -34,3 +49,7 @@ In Psql
 ```shell
 select * from customer.customers;
 ```
+
+Also see
+
+[invalid_customers.csv](../runtime/invalid_customers.csv)
