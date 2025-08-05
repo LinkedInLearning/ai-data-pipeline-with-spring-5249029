@@ -42,16 +42,20 @@ docker exec -it rabbitmq  rabbitmqadmin declare binding source=customers.intake 
 
 Example 
 
-```json
-{
-  "firstName" : "Josiah",
-  "lastName" : "Imani",
-  "email" : "email@email",
-  "phone" : "555-555-5555",
-  "address" : "12 Straight St",
-  "city" : "Erie",
-  "zip": "16510"
-}
+```shell
+curl -X 'POST' \
+'http://localhost:8080/customers' \
+-H 'accept: */*' \
+-H 'Content-Type: application/json' \
+-d '{
+"firstName" : "Josiah",
+"lastName" : "Imani",
+"email" : "email@email",
+"phone" : "555-555-5555",
+"address" : "12 Straight St",
+"city" : "Erie",
+"zip": "16510"
+}'
 ```
 
 
