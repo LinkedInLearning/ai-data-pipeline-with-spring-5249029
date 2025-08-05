@@ -1,3 +1,5 @@
+docker network  rm data-pipelines
+
 ```shell
 docker network create data-pipelines
 ```
@@ -14,13 +16,35 @@ docker run --name postgres --network data-pipelines --rm  \
 ```
 
 
-See
+Access Postgres using psql
 
-[Customer.java](../applications/batching/customer-batch/src/main/java/ai/data/pipeline/spring/customer/domain/Customer.java)
+```shell
+docker exec -it postgres psql -U postgres
+```
+ 
+
+list tables in postgres
+
+```psql
+\dt *
+```
+[schema-postgres.sql](../applications/batching/customer-batch/src/main/resources/schema-postgres.sql)
+
 
 See
 
 [BatchConfig.java](../applications/batching/customer-batch/src/main/java/ai/data/pipeline/spring/customer/BatchConfig.java)
+
+
+See CSV
+
+[customers-source.csv](../applications/batching/customer-batch/src/test/resources/sources/customers-source.csv)
+
+
+See
+
+[Customer.java](../applications/batching/customer-batch/src/main/java/ai/data/pipeline/spring/customer/domain/Customer.java)
+
 
 See
 
@@ -32,11 +56,10 @@ See
 
 
 
-Access Postgres using psql
-
 ```shell
-docker exec -it postgres psql -U postgres
+mvn package
 ```
+
 
 Run batch
 
@@ -50,6 +73,12 @@ In Psql
 select * from customer.customers;
 ```
 
+
+
+
 Also see
 
 [invalid_customers.csv](../runtime/invalid_customers.csv)
+
+Find records in source
+
