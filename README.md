@@ -1,4 +1,4 @@
-# AI Data Orchestration with SCDF
+# AI Data Pipelines with Spring
 This is the repository for the LinkedIn Learning course `AI Data Pipeline with Spring`. The full course is available from [LinkedIn Learning][lil-course-url].
 
 ![lil-thumbnail-url]
