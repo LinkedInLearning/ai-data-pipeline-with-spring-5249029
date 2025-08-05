@@ -19,6 +19,9 @@ docker run --name postgres --network data-pipelines --rm  \
 docker exec -it postgres psql -U postgres
 ```
 
+See
+
+[BatchConfig.java](../applications/batching/customer-batch/src/main/java/ai/data/pipeline/spring/customer/BatchConfig.java)
 
 Run batch
 

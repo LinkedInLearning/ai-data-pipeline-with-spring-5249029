@@ -43,6 +43,7 @@ import javax.sql.DataSource;
 @Slf4j
 public class BatchConfig {
 
+    //Number of records to write to the database at a time
     @Value("${spring.batch.chuck.size:10}")
     private int chunkSize;
 
@@ -66,24 +67,71 @@ public class BatchConfig {
                 zip     = :location.zip
     """;
 
+    //The input CSV field
     @Value("${source.input.file.csv}")
     private Resource customerInputResource;
 
+    //The name of the JOB
     private final static String jobName = "load-customer";
 
+
     /**
-     * Create a repository implementation that does not save batch information to the database.
-     * This is used to simplify this example. Note: Saving information such as the status of the tables
-     * is recommended for production use.
-     *
-     * @return the job repository
+     * Create the step based on the provided reader, processor and writer
+     * @param itemReader the customer record item reader
+     * @param processor the process for each customer record
+     * @param writer the database writer
+     * @param jobRepository the Spring Batch job repository
+     * @param transactionManager the transaction manager
+     * @return the created step
      */
     @Bean
-    ResourcelessJobRepository resourcelessJobRepository()
-    {
-        return new ResourcelessJobRepository();
-
+    public Step loadCustomerStep(ItemReader<Customer> itemReader,
+                                 ItemProcessor<Customer, Customer> processor,
+                                 ItemWriter<Customer> writer,
+                                 JobRepository jobRepository,
+                                 PlatformTransactionManager transactionManager) {
+        return new StepBuilder("loadCustomerStep", jobRepository)
+                .<Customer, Customer>chunk(chunkSize,transactionManager)
+                .reader(itemReader)
+                .processor(processor)
+                .writer(writer)
+                .build();
     }
+
+    /**
+     * Construct a reader to read the customer information from an CSV file
+     * @param mapper the customer field mapp
+     * @return the reader
+     */
+    @Bean
+    public FlatFileItemReader<Customer> reader(CustomerFieldMapper mapper) {
+        return new FlatFileItemReaderBuilder<Customer>()
+                .name("customerItemReader")
+                .resource(customerInputResource)
+                .delimited()
+                .names("id","firstName", "lastName","email"
+                        ,"phone","address","city","state"
+                        ,"zip"
+                )
+                .fieldSetMapper(mapper)
+                .build();
+    }
+
+    /**
+     * Construct a batch writer to insert customer records
+     * @param dataSource the JDBC datasource
+     * @return the JDBC writer
+     */
+    @Bean
+    public JdbcBatchItemWriter<Customer> writer(DataSource dataSource) {
+
+        return new JdbcBatchItemWriterBuilder<Customer>()
+                .sql(saveSql)
+                .itemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>())
+                .dataSource(dataSource)
+                .build();
+    }
+
 
     /**
      *
@@ -117,60 +165,19 @@ public class BatchConfig {
 
 
     /**
-     * Construct a reader to read the customer information from an CSV file
-     * @param mapper the customer field mapp
-     * @return the reader
+     * Create a repository implementation that does not save batch information to the database.
+     * This is used to simplify this example. Note: Saving information such as the status of the tables
+     * is recommended for production use.
+     *
+     * @return the job repository
      */
     @Bean
-    public FlatFileItemReader<Customer> reader(CustomerFieldMapper mapper) {
-        return new FlatFileItemReaderBuilder<Customer>()
-                .name("customerItemReader")
-                .resource(customerInputResource)
-                .delimited()
-                .names("id","firstName", "lastName","email"
-                        ,"phone","address","city","state"
-                        ,"zip"
-                        )
-                .fieldSetMapper(mapper)
-                .build();
+    ResourcelessJobRepository resourcelessJobRepository()
+    {
+        return new ResourcelessJobRepository();
+
     }
 
-    /**
-     * Construct a batch writer to insert customer records
-     * @param dataSource the JDBC datasource
-     * @return the JDBC writer
-     */
-    @Bean
-    public JdbcBatchItemWriter<Customer> writer(DataSource dataSource) {
 
-        return new JdbcBatchItemWriterBuilder<Customer>()
-                .sql(saveSql)
-                .itemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>())
-                .dataSource(dataSource)
-                .build();
-    }
-
-    /**
-     * Create the step based on the provided reader, processor and writer
-     * @param itemReader the customer record item reader
-     * @param processor the process for each customer record
-     * @param writer the database writer
-     * @param jobRepository the Spring Batch job repository
-     * @param transactionManager the transaction manager
-     * @return the created step
-     */
-    @Bean
-    public Step loadCustomerStep(ItemReader<Customer> itemReader,
-                                 ItemProcessor<Customer, Customer> processor,
-                                 ItemWriter<Customer> writer,
-                                 JobRepository jobRepository,
-                                 PlatformTransactionManager transactionManager) {
-        return new StepBuilder("loadCustomerStep", jobRepository)
-                .<Customer, Customer>chunk(chunkSize,transactionManager)
-                .reader(itemReader)
-                .processor(processor)
-                .writer(writer)
-                .build();
-    }
 
 }
