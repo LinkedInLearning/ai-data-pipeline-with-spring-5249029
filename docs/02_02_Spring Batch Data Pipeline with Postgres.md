@@ -82,3 +82,4 @@ Also see
 
 Find records in source
 
+[customers-source.csv](../applications/batching/customer-batch/src/test/resources/sources/customers-source.csv)
