@@ -5,10 +5,10 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>ai.data.pipelines.spring</groupId>
-	<artifactId>ai-data-pipeline-with-spring</artifactId>
+	<artifactId>ai-data-pipelines-with-spring</artifactId>
 	<packaging>pom</packaging>
 	<version>1.0</version>
-	<name>ai-data-pipeline-with-spring-showcase</name>
+	<name>ai-data-pipelines-with-spring</name>
 	<modules>
 		<module>applications/batching/customer-batch</module>
 		<module>applications/sinks/postgres-sink</module>
