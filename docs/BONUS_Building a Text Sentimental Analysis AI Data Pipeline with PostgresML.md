@@ -93,12 +93,12 @@ java -jar runtime/http-source-rabbit-5.0.1.jar --http.supplier.pathPattern=feedb
 Start Processor Text Summary
 
 ```shell
-java -jar applications/processors/postgres-query-processor/target/postgres-query-processor-0.0.1-SNAPSHOT.jar --spring.datasource.username=postgres --spring.datasource.url="jdbc:postgresql://localhost:6432/postgresml" --spring.datasource.driverClassName=org.postgresql.Driver --spring.cloud.stream.bindings.input.destination=customers.input.feedback --spring.cloud.stream.bindings.output.destination=customers.output.feedback.summary --spring.config.import=optional:file:///Users/Projects/solutions/ai-ml/dev/ai-data-pipeline-with-spring-showcase/applications/processors/postgres-query-processor/src/main/resources/text-summarization.yml --spring.datasource.hikari.max-lifetime=600000 --spring.cloud.stream.bindings.input.group=postgres-query-processor
+java -jar applications/processors/postgres-query-processor/target/postgres-query-processor-0.0.1-SNAPSHOT.jar --spring.datasource.username=postgres --spring.datasource.url="jdbc:postgresql://localhost:6432/postgresml" --spring.datasource.driverClassName=org.postgresql.Driver --spring.cloud.stream.bindings.input.destination=customers.input.feedback --spring.cloud.stream.bindings.output.destination=customers.output.feedback.summary --spring.config.import=optional:file://$PWD/applications/processors/postgres-query-processor/src/main/resources/text-summarization.yml --spring.datasource.hikari.max-lifetime=600000 --spring.cloud.stream.bindings.input.group=postgres-query-processor
 ```
 Start Processor Text sentiment
 
 ```shell
-java -jar applications/processors/postgres-query-processor/target/postgres-query-processor-0.0.1-SNAPSHOT.jar --spring.datasource.username=postgres --spring.datasource.url="jdbc:postgresql://localhost:6432/postgresml" --spring.datasource.driverClassName=org.postgresql.Driver --spring.cloud.stream.bindings.input.destination=customers.output.feedback.summary --spring.cloud.stream.bindings.output.destination=customers.output.feedback.sentiment --spring.config.import=optional:file:///Users/Projects/solutions/ai-ml/dev/ai-data-pipeline-with-spring-showcase/applications/processors/postgres-query-processor/src/main/resources/sentiment-analysis.yml --spring.datasource.hikari.max-lifetime=600000 --spring.cloud.stream.bindings.input.group=postgres-query-processor
+java -jar applications/processors/postgres-query-processor/target/postgres-query-processor-0.0.1-SNAPSHOT.jar --spring.datasource.username=postgres --spring.datasource.url="jdbc:postgresql://localhost:6432/postgresml" --spring.datasource.driverClassName=org.postgresql.Driver --spring.cloud.stream.bindings.input.destination=customers.output.feedback.summary --spring.cloud.stream.bindings.output.destination=customers.output.feedback.sentiment --spring.config.import=optional:file://$PWD/applications/processors/postgres-query-processor/src/main/resources/sentiment-analysis.yml --spring.datasource.hikari.max-lifetime=600000 --spring.cloud.stream.bindings.input.group=postgres-query-processor
 ```
 
 
@@ -107,40 +107,7 @@ Start Sink
 
 
 ```shell
-java -jar applications/sinks/postgres-sink/target/postgres-sink-0.0.1-SNAPSHOT.jar --spring.datasource.username=postgres --spring.datasource.driverClassName=org.postgresql.Driver --spring.datasource.url="jdbc:postgresql://localhost/postgres"  --spring.cloud.stream.bindings.input.destination=customers.output.feedback.sentiment --spring.config.import=optional:file:///Users/Projects/solutions/ai-ml/dev/ai-data-pipeline-with-spring-showcase/applications/sinks/postgres-sink/src/main/resources/postgres-sentiment-analysis.yml --spring.cloud.stream.bindings.input.group=postgres-sink
-```
-
-
-
-```shell
-http-text-sentiment=http | summarize: postgres-query | sentiment: postgres-query | postgres
-```
-
-
-Deploy
-
-```properties
-app.http.path-pattern=feedback
-app.http.server.port=8094
-
-app.summarize.spring.datasource.username=postgres
-app.summarize.spring.datasource.url="jdbc:postgresql://localhost:6432/postgresml"
-app.summarize.spring.datasource.driverClassName=org.postgresql.Driver
-app.summarize.spring.config.import=optional:file:///Users/Projects/solutions/ai-ml/dev/ai-data-pipelines-with-scdf-showcase/applications/processors/postgres-query-processor/src/main/resources/text-summarization.yml
-app.summarize.spring.datasource.hikari.max-lifetime=600000
-
-app.sentiment.spring.datasource.username=postgres
-app.sentiment.spring.datasource.url="jdbc:postgresql://localhost:6432/postgresml"
-app.sentiment.spring.datasource.driverClassName=org.postgresql.Driver
-app.sentiment.spring.config.import=optional:file:///Users/Projects/solutions/ai-ml/dev/ai-data-pipelines-with-scdf-showcase/applications/processors/postgres-query-processor/src/main/resources/sentiment-analysis.yml
-app.sentiment.spring.datasource.hikari.max-lifetime=600000
-
-
-app.postgres.spring.datasource.username=postgres
-app.postgres.spring.datasource.url="jdbc:postgresql://localhost:6432/postgresml"
-app.postgres.spring.config.import=optional:file:///Users/Projects/solutions/ai-ml/dev/ai-data-pipelines-with-scdf-showcase/applications/sinks/postgres-sink/src/main/resources/postgres-sentiment-analysis.yml
-app.postgres.spring.datasource.driverClassName=org.postgresql.Driver
-app.postgres.spring.datasource.hikari.max-lifetime=600000
+java -jar applications/sinks/postgres-sink/target/postgres-sink-0.0.1-SNAPSHOT.jar --spring.datasource.username=postgres --spring.datasource.driverClassName=org.postgresql.Driver --spring.datasource.url="jdbc:postgresql://localhost/postgres"  --spring.cloud.stream.bindings.input.destination=customers.output.feedback.sentiment --spring.config.import=optional:file://$PWD/applications/sinks/postgres-sink/src/main/resources/postgres-sentiment-analysis.yml --spring.cloud.stream.bindings.input.group=postgres-sink
 ```
 
 
