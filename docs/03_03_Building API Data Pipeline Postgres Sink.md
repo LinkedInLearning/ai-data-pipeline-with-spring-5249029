@@ -149,9 +149,9 @@ curl -X 'POST' \
 
 ```sql
 select * from customer.customers;
-
 ```
 
+Add another customer Jack Smith
 ```shell
 curl -X 'POST' \
   'http://localhost:8080/customers' \
