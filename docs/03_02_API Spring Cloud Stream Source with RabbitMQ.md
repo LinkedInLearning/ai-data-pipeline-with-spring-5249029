@@ -49,8 +49,8 @@ Example
   "email" : "email@email",
   "phone" : "555-555-5555",
   "address" : "12 Straight St",
-  "city" : "gold",
-  "zip": "55555"
+  "city" : "Erie",
+  "zip": "16510"
 }
 ```
 
@@ -62,13 +62,13 @@ curl -X 'POST' \
   -H 'accept: */*' \
   -H 'Content-Type: application/json' \
   -d '{
-  "firstName" : "Josiah",
-  "lastName" : "Imani",
-  "email" : "email@email",
+  "firstName" : "Juan",
+  "lastName" : "Wagner",
+  "email" : "jwagner79@ihg.com",
   "phone" : "555-555-5555",
-  "address" : "12 Straight St",
-  "city" : "gold",
-  "state" "ny",
-  "zip": "55555"
+  "address" : "1496 Reinke Lane",
+  "city" : "New York City",
+  "state" "NY",
+  "zip": "10275"
 }'
 ```
