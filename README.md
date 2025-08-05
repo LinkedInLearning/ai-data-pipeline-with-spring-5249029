@@ -32,7 +32,7 @@ To resolve this issue:
 
 ## Instructor
 
-Instructor name
+Instructor name: Gregory Green`
 
 Instructor description
 
