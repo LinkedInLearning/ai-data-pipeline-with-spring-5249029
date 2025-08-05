@@ -46,7 +46,7 @@ SELECT pgml.transform( task   => 'text-classification', inputs => ARRAY['the use
 
 
 ```shell
-SELECT pgml.transform( task   => 'text-classification', inputs => ARRAY['I love building linked Learning courses!']) AS positivity;
+SELECT pgml.transform( task   => 'text-classification', inputs => ARRAY['I love building linked Learning courses with my course producer Dione!!!']) AS positivity;
 ```
 
 

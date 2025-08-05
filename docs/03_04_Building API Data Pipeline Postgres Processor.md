@@ -125,6 +125,8 @@ java -jar runtime/http-source-rabbit-5.0.1.jar --http.supplier.pathPattern=custo
 
 Start Processor customer formatting from a marketing campaign
 
+[QueryFunctionProcessor.java](../applications/processors/postgres-query-processor/src/main/java/ai/data/pipeline/spring/postgres/query/processors/QueryFunctionProcessor.java)
+
 ```shell
  java -jar applications/processors/postgres-query-processor/target/postgres-query-processor-0.0.1-SNAPSHOT.jar --query.processor.sql="select  (CASE WHEN LENGTH(cust.last_nm) > 0  THEN cust.last_nm ELSE pc.last_nm END) as lastname, (CASE WHEN LENGTH(cust.first_nm) > 0  THEN cust.first_nm ELSE pc.first_nm END) as firstname, (CASE WHEN LENGTH(cust.email) > 0  THEN cust.last_nm ELSE pc.email END) as email, cust.phone as phone, cust.address as address, cust.city as city, cust.state as state, cust.zip as zip from (select :lastname as last_nm, :firstname as first_nm, :email as email, :phone as phone, :address as address, :city as city, :state as state, :zip as zip ) cust LEFT JOIN (select last_nm, first_nm, email, phone  from customer.phone_campaigns)  pc ON cust.phone = pc.phone" --spring.datasource.username=postgres --spring.datasource.password=postgres --spring.datasource.url="jdbc:postgresql://localhost/postgres" --spring.datasource.driverClassName=org.postgresql.Driver --spring.cloud.stream.bindings.input.destination=customers.input.formatting --spring.cloud.stream.bindings.output.destination=customers.output.formatting
 ```
@@ -135,9 +137,6 @@ Start Sink
 ```shell
 java -jar applications/sinks/postgres-sink/target/postgres-sink-0.0.1-SNAPSHOT.jar --spring.datasource.username=postgres --spring.datasource.password=postgres --spring.datasource.driverClassName=org.postgresql.Driver --spring.datasource.url="jdbc:postgresql://localhost/postgres" --sql.consumer.sql="insert into customer.customers(email,first_nm,last_nm,phone,address,city,state,zip) values (:email,:firstname,:lastname,:phone, :address,:city,:state,:zip) on CONFLICT (email) DO UPDATE SET first_nm = :firstname, last_nm = :lastname,  phone = :phone, address = :address, city = :city, state = :state, zip = :zip" --spring.cloud.stream.bindings.input.destination=customers.output.formatting
 ```
-
-
-
 
 ```shell
 curl -X 'POST' \
