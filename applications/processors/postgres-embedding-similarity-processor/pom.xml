@@ -8,7 +8,7 @@
 		<version>3.5.0</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>ai.data.pipeline.spring</groupId>
+	<groupId>ai.data.pipelines.spring</groupId>
 	<artifactId>postgres-embedding-similarity-processor</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>postgres-embedding-similarity-processor</name>

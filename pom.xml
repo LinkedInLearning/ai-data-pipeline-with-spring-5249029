@@ -4,7 +4,7 @@
                              http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>ai.data.pipeline.spring</groupId>
+	<groupId>ai.data.pipelines.spring</groupId>
 	<artifactId>ai-data-pipeline-with-spring</artifactId>
 	<packaging>pom</packaging>
 	<version>1.0</version>
