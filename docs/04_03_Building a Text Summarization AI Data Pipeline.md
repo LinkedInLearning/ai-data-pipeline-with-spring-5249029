@@ -119,3 +119,7 @@ In psql
 ```sql
 select feed_id,summary from customer.feedback;
 ```
+
+```sql
+select LENGTH(summary) sum_len, LENGTH(user_feedback) org_len  from customer.feedback;
+```
