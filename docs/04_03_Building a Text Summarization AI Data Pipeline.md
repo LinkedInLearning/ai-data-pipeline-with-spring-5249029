@@ -4,13 +4,6 @@ Run RabbitMQ
 docker run -it --name rabbitmq   --rm  -p 5672:5672 -p 15672:15672  rabbitmq:4.1.0-management 
 ```
 
-
-Run Postgres
-
-```shell
-docker run --name postgresql --network data-pipelines --rm  -e POSTGRES_USERNAME=postgres -e POSTGRES_PASSWORD=postgres  -e POSTGRESQL_DATABASE=postgres -p 5432:5432 postgres:latest 
-```
-
 Run PostgresML
 
 ```shell
@@ -25,6 +18,11 @@ docker run --rm --name postgresml \
 ```
 
 
+Run Postgres
+
+```shell
+docker run --name postgresql --network data-pipelines --rm  -e POSTGRES_USERNAME=postgres -e POSTGRES_PASSWORD=postgres  -e POSTGRESQL_DATABASE=postgres -p 5432:5432 postgres:latest 
+```
 
 Connect to postgres
 ```shell
