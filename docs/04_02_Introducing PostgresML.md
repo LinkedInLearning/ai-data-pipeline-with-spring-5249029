@@ -6,8 +6,7 @@ Start PostgresML
 docker run --rm  \
     -it \
     -v postgresml_data:/var/lib/postgresql \
-    -p 5433:6432 \
-    -p 8000:8000 \
+    -p 6432:6432 \
     ghcr.io/postgresml/postgresml:2.10.0 \
     sudo -u postgresml psql -d postgresml
 ```
@@ -46,7 +45,7 @@ SELECT pgml.transform( task   => 'text-classification', inputs => ARRAY['the use
 
 
 ```shell
-SELECT pgml.transform( task   => 'text-classification', inputs => ARRAY['I love building linked Learning courses with my course producer Dione!!!']) AS positivity;
+SELECT pgml.transform( task   => 'text-classification', inputs => ARRAY['I love building linked Learning courses with my producer Dione!!!']) AS positivity;
 ```
 
 
