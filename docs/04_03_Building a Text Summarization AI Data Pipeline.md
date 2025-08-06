@@ -58,11 +58,18 @@ java -jar runtime/http-source-rabbit-5.0.1.jar --http.supplier.pathPattern=feedb
 
 
 
-Start Processor text summarization
+ Processor text summarization
 
 ```shell
 java -jar applications/processors/postgres-query-processor/target/postgres-query-processor-0.0.1-SNAPSHOT.jar --spring.datasource.username=postgres --spring.datasource.url="jdbc:postgresql://localhost:6432/postgresml" --spring.datasource.driverClassName=org.postgresql.Driver --spring.datasource.password=postgres --spring.cloud.stream.bindings.input.destination=customers.input.feedback --spring.cloud.stream.bindings.output.destination=customers.output.feedback --spring.config.import=optional:file://$PWD/applications/processors/postgres-query-processor/src/main/resources/text-summarization.yml --spring.datasource.hikari.max-lifetime=600000 --spring.cloud.stream.bindings.input.group=postgres-query-processor
 ```
+
+See 
+
+- [text-summarization.yml](../applications/processors/postgres-query-processor/src/main/resources/text-summarization.yml)
+- [QueryFunctionProcessor.java](../applications/processors/postgres-query-processor/src/main/java/ai/data/pipeline/spring/postgres/query/processors/QueryFunctionProcessor.java)
+
+
 
 Start Sink
 
@@ -70,6 +77,10 @@ Start Sink
 ```shell
 java -jar applications/sinks/postgres-sink/target/postgres-sink-0.0.1-SNAPSHOT.jar --spring.datasource.username=postgres --spring.datasource.password=postgres --spring.datasource.url="jdbc:postgresql://localhost/postgres"  --spring.cloud.stream.bindings.input.destination=customers.output.feedback --spring.config.import=optional:file://$PWD/applications/sinks/postgres-sink/src/main/resources/postgres-text-summarization.yml --spring.cloud.stream.bindings.input.group=postgres-sink
 ```
+See
+
+- [postgres-text-summarization.yml](../applications/sinks/postgres-sink/src/main/resources/postgres-text-summarization.yml)
+- [postgres-text-summarization.yml](../applications/sinks/postgres-sink/src/main/resources/postgres-text-summarization.yml)
 
 
 
