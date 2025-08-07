@@ -3,46 +3,49 @@ This is the repository for the LinkedIn Learning course `AI Data Pipeline with S
 
 ![lil-thumbnail-url]
 
-## Course Description
 
-_See the readme file in the main branch for updated instructions and information._
 ## Instructions
-This repository has branches for each of the videos in the course. You can use the branch pop up menu in github to switch to a specific branch and take a look at the course at that stage, or you can add `/tree/BRANCH_NAME` to the URL to go to the branch you want to access.
 
-## Branches
-The branches are structured to correspond to the videos in the course. The naming convention is `CHAPTER#_MOVIE#`. As an example, the branch named `02_03` corresponds to the second chapter and the third video in that chapter. 
-Some branches will have a beginning and an end state. These are marked with the letters `b` for "beginning" and `e` for "end". The `b` branch contains the code as it is at the beginning of the movie. The `e` branch contains the code as it is at the end of the movie. The `main` branch holds the final state of the code when in the course.
+The source code for the live demonstrations are available here on the source Github repo. You’re not required to review or build demo applications.  The source code is available as a reference implementation so feel free to explore.
 
-When switching from one exercise files branch to the next after making changes to the files, you may get a message like this:
-
-    error: Your local changes to the following files would be overwritten by checkout:        [files]
-    Please commit your changes or stash them before you switch branches.
-    Aborting
-
-To resolve this issue:
-	
-    Add changes to git using this command: git add .
-	Commit changes using this command: git commit -m "some message"
 
 ## Installing
-1. To use these exercise files, you must have the following installed:
-	- [list of requirements for course]
-2. Clone this repository into your local machine using the terminal (Mac), CMD (Windows), or a GUI tool like SourceTree.
-3. [Course-specific instructions]
+
+
+The details to run the demonstrations can be found under the docs folder.
+
+- [02_02_Spring Batch Data Pipeline with Postgres.md](docs/02_02_Spring%20Batch%20Data%20Pipeline%20with%20Postgres.md)
+- [03_02_API Spring Cloud Stream Source with RabbitMQ.md](docs/03_02_API%20Spring%20Cloud%20Stream%20Source%20with%20RabbitMQ.md)
+- [03_03_Building API Data Pipeline Postgres Sink.md](docs/03_03_Building%20API%20Data%20Pipeline%20Postgres%20Sink.md)
+- [03_04_Building API Data Pipeline Postgres Processor.md](docs/03_04_Building%20API%20Data%20Pipeline%20Postgres%20Processor.md)
+- [04_02_Introducing PostgresML.md](docs/04_02_Introducing%20PostgresML.md)
+- [04_03_Building a Text Summarization AI Data Pipeline.md](docs/04_03_Building%20a%20Text%20Summarization%20AI%20Data%20Pipeline.md)
+- [05_01_Introducing Spring AI.md](docs/05_01_Introducing%20Spring%20AI.md)
+- [05_02_Building a Text Sentimental Analysis AI Data Pipeline.md](docs/05_02_Building%20a%20Text%20Sentimental%20Analysis%20AI%20Data%20Pipeline.md)
+- [05_04_Building a Text Sentiment Analysis AI Data Pipeline with RAG.md](docs/05_04_Building%20a%20Text%20Sentiment%20Analysis%20AI%20Data%20Pipeline%20with%20RAG.md)
+- [05_05_Building a Similarity AI Data Pipeline.md](docs/05_05_Building%20a%20Similarity%20AI%20Data%20Pipeline.md)
+
 
 ## Instructor
 
 Instructor name: Gregory Green`
 
-Instructor description
+Being familiar with the Java programming language
+Will help you get the  most out of those this course.
 
-                            
+You should be comfortable with developing Java applications using the maven built tool, along with a integrated developer editors such as intellij.
 
-Check out my other courses on [LinkedIn Learning](https://www.linkedin.com/learning/instructors/).
+A having hands-on experience with Spring framework and spring boot will help you better understand some of the examples
+
+You should be comfortable with at least one relational database such as postgres. And should be comfortable with the structure, query, language, or SQL.
+
+Although it’s not required, it is useful it is useful to have experience with messaging system, such as rabbit and Q or similar solutions,  in addition to a basic understanding of docker and  containers.
 
 
-[0]: # (Replace these placeholder URLs with actual course URLs)
+Check out my other courses on [LinkedIn Learning](https://www.linkedin.com/learning/instructors/gregory-green).
 
-[lil-course-url]: https://www.linkedin.com/learning/
-[lil-thumbnail-url]: https://media.licdn.com/dms/image/v2/D4E0DAQG0eDHsyOSqTA/learning-public-crop_675_1200/B4EZVdqqdwHUAY-/0/1741033220778?e=2147483647&v=beta&t=FxUDo6FA8W8CiFROwqfZKL_mzQhYx9loYLfjN-LNjgA
+
+- [Data Resilience with Spring and RabbitMQ Event Streaming](https://www.linkedin.com/learning/data-resilience-with-spring-and-rabbitmq-event-streaming/introduction-to-data-resiliency)
+- [Building High-Throughput Data Microservices](https://www.linkedin.com/learning/building-high-throughput-data-microservices/rabbitmq-streams-for-high-throughput)
+- [Achieving Low-Latency Data with Edge Computing](https://www.linkedin.com/learning/achieving-low-latency-data-with-edge-computing/why-is-low-latency-data-with-edge-computing-important)
 
