@@ -104,9 +104,41 @@ docker run --rm --name postgresml \
     ghcr.io/postgresml/postgresml:2.10.0 \
     sudo -u postgresml psql -d postgresml
 ```
+CREATE EXTENSION vector;
 
 
-Drop so it be recreated by Spring AI
+Create tables with vector embeddings
+
+Here is an example  to create table with a embedding data type column. This will allows you to store the embeddings array of numerical values that are produced from a model
+
+```sql
+CREATE TABLE items 
+(
+   id bigserial PRIMARY KEY, 
+  embedding vector(3)
+);
+
+```
+
+You can use insert and update statements providing an array of numbers to be saved into the appropriate database column
+
+```sql
+INSERT INTO items 
+(embedding) 
+VALUES ('[1,2,3]'), ('[4,5,6]');
+
+```
+
+This is a very basic Postgres vector database search that  determines the distance between a number and an embedding. The distance is calculated based on the law of cosines
+
+```sql
+SELECT 1 - (embedding <=> '[3,1,2]') 
+AS cosine_similarity 
+FROM items;
+
+```
+
+Drop so it be recreated by Spring AI (if created)
 
 ```sql
 drop table vector_store;
@@ -129,11 +161,20 @@ Start Processor Text Summary
 ```shell
 java -jar applications/processors/postgres-query-processor/target/postgres-query-processor-0.0.1-SNAPSHOT.jar --spring.datasource.username=postgres --spring.datasource.url="jdbc:postgresql://localhost:6432/postgresml" --spring.datasource.driverClassName=org.postgresql.Driver --spring.cloud.stream.bindings.input.destination=customers.input.feedback --spring.cloud.stream.bindings.output.destination=customers.output.feedback.summary --spring.config.import=optional:file://$PWD/applications/processors/postgres-query-processor/src/main/resources/text-summarization.yml --spring.datasource.hikari.max-lifetime=600000 --spring.cloud.stream.bindings.input.group=postgres-query-processor
 ```
-Start Processor Text sentiment
+Start Processor Text sentiment RAG
 
 ```shell
 java -jar applications/processors/ai-sentiment-rag-processor/target/ai-sentiment-rag-processor-0.0.1-SNAPSHOT.jar --spring.cloud.stream.bindings.input.destination=customers.output.feedback.summary --spring.cloud.stream.bindings.output.destination=customers.output.feedback.sentiment --spring.datasource.username=postgres --spring.datasource.password=postgres --spring.datasource.driverClassName=org.postgresql.Driver --spring.datasource.url="jdbc:postgresql://localhost:6432/postgresml" 
 ```
+
+See [CustomerFeedbackSentimentProcessor.java](../applications/processors/ai-sentiment-rag-processor/src/main/java/ai/data/pipeline/sentiment/processor/CustomerFeedbackSentimentProcessor.java)
+
+See [pom.xml](../applications/processors/ai-sentiment-rag-processor/pom.xml)
+
+See [VectorStoreConfig.java](../applications/processors/ai-sentiment-rag-processor/src/main/java/ai/data/pipeline/sentiment/VectorStoreConfig.java)
+
+
+
 
 
 Start Sink
@@ -153,9 +194,37 @@ curl -X 'POST' \
   -d '{
   "id" : "S001",
   "email" : "jmatthews@email",
-  "feedback" : "You know what. It is ok. I love being on hold FOREVER. I will just take by business somewhere else."
+  "feedback" : "You know what. It is ok. I love being on hold FOREVER. I will just take my business somewhere else."
 }'
 ```
+
+
+
+```shell
+curl -X 'POST' \
+  'http://localhost:8094/feedback' \
+  -H 'accept: */*' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "id" : "S002",
+  "email" : "jmatthews@email",
+  "feedback" : "I was transferred, and had to keep repeating the problem. They should be able to see notes in the SYSTEM. And WHY are the LINES SO LONG!!!."
+}'
+```
+
+
+```shell
+curl -X 'POST' \
+  'http://localhost:8094/feedback' \
+  -H 'accept: */*' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "id" : "S003",
+  "email" : "graceful@email",
+  "feedback" : "THANK YOU SO MUCH!!! I LOVE THAT YOU ARE TRYING your best."
+}'
+```
+
 
 
 In psql

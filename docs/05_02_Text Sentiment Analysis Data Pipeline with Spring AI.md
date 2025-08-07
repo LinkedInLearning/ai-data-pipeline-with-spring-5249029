@@ -94,6 +94,13 @@ Start Sentiment Analysis Processor
 java -jar applications/processors/ai-sentiment-processor/target/ai-sentiment-processor-0.0.1-SNAPSHOT.jar --spring.cloud.stream.bindings.input.destination=customers.output.feedback.summary --spring.cloud.stream.bindings.output.destination=customers.output.feedback.sentiment
 ```
 
+See [CustomerFeedbackSentimentProcessor.java](../applications/processors/ai-sentiment-processor/src/main/java/ai/data/pipeline/sentiment/processor/CustomerFeedbackSentimentProcessor.java)
+
+See [CustomerFeedback.java](../applications/processors/ai-sentiment-processor/src/main/java/ai/data/pipeline/sentiment/domains/CustomerFeedback.java)
+See [FeedbackSentiment.java](../applications/processors/ai-sentiment-processor/src/main/java/ai/data/pipeline/sentiment/domains/FeedbackSentiment.java)
+
+Added support for OLLAMA
+[pom.xml](../applications/processors/ai-sentiment-processor/pom.xml)
 
 
 Start Postgres Sink 
@@ -148,5 +155,4 @@ In psql
 
 ```sql
  select sentiment,summary from customer.feedback;
-
 ```
