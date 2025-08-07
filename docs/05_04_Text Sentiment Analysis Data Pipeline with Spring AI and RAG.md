@@ -104,7 +104,16 @@ docker run --rm --name postgresml \
     ghcr.io/postgresml/postgresml:2.10.0 \
     sudo -u postgresml psql -d postgresml
 ```
+
+If you are installing Postgres on your own or if you have a different image other than the one that I have been using or you need to install the PGvector extension using this create extension statement
+
+PG vector it’s already configured in the PostgresMl  docker image by default
+
+
+```sql
 CREATE EXTENSION vector;
+```
+
 
 
 Create tables with vector embeddings
