@@ -171,7 +171,19 @@ curl -X 'POST' \
                 }'
 ```
 
+----------------------
 In psql
+
+Now lets look at the results in  customer similarities table. 
+
+```sql
+select *
+from customer.customer_similarities;
+```
+
+
+The sink stores the similarities as a JSON array.
+If needed, I can use Postgres parse the records.
 
 ```sql
 select customer_id,
@@ -182,10 +194,19 @@ select customer_id,
 from customer.customer_similarities;
 ```
 
-In PostgresML
+The jsonb_array_elements function parse JSON array fields.
+So I can select the individual fields such as text and score from the JSONB column.
+Which is a nicer format
+
+
+The records in PostgresML vector_store database table are used by the processor search for duplicate records
+based on matching similaries.
 
 ```sql
 select id,content from public.vector_store ;
 ```
+
+Any additional customer details submitted to the data pipeline will check for matches in this table.
+Spring AI along with Postgres as a vector database hides the complexity of finding duplicate records.
 
 

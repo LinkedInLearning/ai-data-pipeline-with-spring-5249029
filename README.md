@@ -31,7 +31,7 @@ The details to run the demonstrations can be found under the docs folder.
 Instructor name: Gregory Green`
 
 Being familiar with the Java programming language
-Will help you get the  most out of those this course.
+will help you get the  most out of those this course.
 
 You should be comfortable with developing Java applications using the maven built tool, along with a integrated developer editors such as intellij.
 
