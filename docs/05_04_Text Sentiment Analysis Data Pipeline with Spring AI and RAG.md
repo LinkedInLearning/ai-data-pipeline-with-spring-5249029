@@ -256,6 +256,15 @@ curl -X 'POST' \
 ```
 
 
+See [postgres-sentiment-analysis-ollama.yml](../applications/sinks/postgres-sink/src/main/resources/postgres-sentiment-analysis-ollama.yml)
+- Taking a closer look at the sink
+- Postgres has the ability to convert text to json
+- This is done with the ::json syntax
+- -> allows you to get elemements in the JSON object by its name
+- So this is an easy way to get the customer feedback details 
+- to save to the table
+
+
 
 In psql
 
