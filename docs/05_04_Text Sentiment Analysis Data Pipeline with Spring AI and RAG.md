@@ -1,4 +1,13 @@
 
+# Setup
+```shell
+docker volume rm  postgresml_data
+```
+
+
+----------
+
+Demo
 
 ```shell
 ollama serve
