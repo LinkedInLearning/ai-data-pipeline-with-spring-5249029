@@ -43,8 +43,8 @@ public class EmbeddingSimilarityFunction implements Function<String,SimilarDocum
 
         log.info("payloadDocument: {}", payloadDocument);
 
-        var text = payloadDocument.getText();
-        if (text == null)
+        var customerInfo = payloadDocument.getText();
+        if (customerInfo == null)
             return null;
 
         log.info("Saving into vector store");
@@ -53,7 +53,7 @@ public class EmbeddingSimilarityFunction implements Function<String,SimilarDocum
 
         var criteria = SearchRequest.builder().query(payload)
                 .topK(properties.getTopK())
-                .query(text)
+                .query(customerInfo)
                 .similarityThreshold(properties.getSimilarityThreshold())
                 .build();
 

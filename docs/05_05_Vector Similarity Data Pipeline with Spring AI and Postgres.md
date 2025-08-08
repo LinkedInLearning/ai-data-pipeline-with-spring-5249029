@@ -1,8 +1,11 @@
+# Setup
+```shell
+docker volume rm  postgresml_data
+```
+
+
 Run Rabbit
 
-```shell
-docker network create data-pipeline
-```
 
 ```shell
 docker run -it --name rabbitmq   --rm  -p 5672:5672 -p 15672:15672  rabbitmq:4.1.0-management 
@@ -25,6 +28,8 @@ docker run --name postgres --network data-pipelines --rm  \
 docker exec -it postgres psql -U postgres
 ```
 
+I will create customer_similarities table.
+
 ```shell
 create  schema  if not exists customer ;
 
@@ -34,6 +39,12 @@ create table customer.customer_similarities(
  PRIMARY KEY (customer_id)
 );
 ```
+
+Here  I am using a similarites column with a special data type column.
+In the previous example, I was able to parse the JSON to store into invidual column (such as the email, first and last name).
+
+In this case, I wanted to show you that you can just store json natively into Postgres
+using the JSONB data type.
 
 
 Run PostgresML with PgVector
@@ -49,23 +60,27 @@ docker run --rm --name postgresml \
     sudo -u postgresml psql -d postgresml
 ```
 
-Drop so it be recreated by Spring AI
+
+Here is an example similar search of a perfect match between 2 identical vectors
 
 ```sql
-drop table vector_store;
+SELECT 1- ('[1, 0, 0]' <=> '[1, 0, 0]')::float AS cosine_distance;
 ```
+- The <=> is a special syntax used by pgvector to apply the law of cosines
+- ::float converts the cosine results to a float
 
-Distance 0
+
+Here is an example of not an exact match, but very similar vectors
 
 ```sql
-SELECT '[1, 0, 0]' <=> '[1, 0, 0]' AS cosine_distance;
+SELECT 1- ('[1, 1, 0]' <=> '[1, 1, 0.5]')::float AS cosine_distance;
 ```
 
-Non Zero Distance
+Here is one more Example pf 2 vector embeddings that are opposite of each other
+
 ```sql
-SELECT '[1, 1, 0]' <=> '[1, 0, 0]' AS cosine_distance;
+SELECT 1- ('[1, 1, 1]' <=> '[-1, -1, -1]')::float AS cosine_distance;
 ```
-
 
 
 ---------------------------
@@ -84,9 +99,18 @@ Start similarity processor
 java -jar applications/processors/postgres-embedding-similarity-processor/target/postgres-embedding-similarity-processor-0.0.1-SNAPSHOT.jar --spring.datasource.username=postgres --spring.datasource.url="jdbc:postgresql://localhost:6432/postgresml" --spring.datasource.driverClassName=org.postgresql.Driver --spring.cloud.stream.bindings.input.destination=customers.similarities.input --spring.cloud.stream.bindings.output.destination=customers.similarities.output --embedding.similarity.processor.topK=3 --embedding.similarity.processor.similarityThreshold="0.90" --embedding.similarity.processor.documentTextFieldNames="email,phone,zip,state,city,address,lastName,firstName" --spring.datasource.hikari.max-lifetime=600000 --spring.cloud.stream.bindings.input.group=postgres-query-processor
 ```
 
-- See [EmbeddingSimilarityFunction.java](../applications/processors/postgres-embedding-similarity-processor/src/main/java/ai/data/pipeline/postgres/embedding/function/EmbeddingSimilarityFunction.java)
-
-- See [PayloadToDocument.java](../applications/processors/postgres-embedding-similarity-processor/src/main/java/ai/data/pipeline/postgres/embedding/conversion/PayloadToDocument.java)
+See [EmbeddingSimilarityFunction.java](../applications/processors/postgres-embedding-similarity-processor/src/main/java/ai/data/pipeline/postgres/embedding/function/EmbeddingSimilarityFunction.java)
+- It is provided with a vector store that uses Postgres with the pgvector extension
+- It using an object to convert the payload to a Spring AI Document object
+  - See [PayloadToDocument.java](../applications/processors/postgres-embedding-similarity-processor/src/main/java/ai/data/pipeline/postgres/embedding/conversion/PayloadToDocument.java)
+    - fieldName text fields names are passed in a runtime.
+    - So the vector save to fields such as email,phone,zip,state,city,address,lastName,firstName that a parsed from the JSON payload
+  - The processor then builds the search criteria using the Spring AI abstraction. 
+  - This results the a limited number of "top" or best match results 
+  - Based on the customer information 
+  - I set a threshold, for example the match distance must be greater than 0.90 
+  - The list of results are converted to JSON 
+  - and returned the sink using RabbitMQ
 
 
 - See [SimilarDocuments.java](../applications/processors/postgres-embedding-similarity-processor/src/main/java/ai/data/pipeline/postgres/embedding/domain/SimilarDocuments.java)
