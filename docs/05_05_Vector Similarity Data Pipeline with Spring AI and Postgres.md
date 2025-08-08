@@ -25,7 +25,6 @@ docker run --name postgres --network data-pipelines --rm  \
 docker exec -it postgres psql -U postgres
 ```
 
-
 ```shell
 create  schema  if not exists customer ;
 
@@ -85,7 +84,12 @@ Start similarity processor
 java -jar applications/processors/postgres-embedding-similarity-processor/target/postgres-embedding-similarity-processor-0.0.1-SNAPSHOT.jar --spring.datasource.username=postgres --spring.datasource.url="jdbc:postgresql://localhost:6432/postgresml" --spring.datasource.driverClassName=org.postgresql.Driver --spring.cloud.stream.bindings.input.destination=customers.similarities.input --spring.cloud.stream.bindings.output.destination=customers.similarities.output --embedding.similarity.processor.topK=3 --embedding.similarity.processor.similarityThreshold="0.90" --embedding.similarity.processor.documentTextFieldNames="email,phone,zip,state,city,address,lastName,firstName" --spring.datasource.hikari.max-lifetime=600000 --spring.cloud.stream.bindings.input.group=postgres-query-processor
 ```
 
+- See [EmbeddingSimilarityFunction.java](../applications/processors/postgres-embedding-similarity-processor/src/main/java/ai/data/pipeline/postgres/embedding/function/EmbeddingSimilarityFunction.java)
 
+- See [PayloadToDocument.java](../applications/processors/postgres-embedding-similarity-processor/src/main/java/ai/data/pipeline/postgres/embedding/conversion/PayloadToDocument.java)
+
+
+- See [SimilarDocuments.java](../applications/processors/postgres-embedding-similarity-processor/src/main/java/ai/data/pipeline/postgres/embedding/domain/SimilarDocuments.java)
 
 
 

@@ -53,9 +53,6 @@ public class EmbeddingSimilarityFunction implements Function<String,SimilarDocum
 
         var criteria = SearchRequest.builder().query(payload)
                 .topK(properties.getTopK())
-//                .filterExpression(
-//                        new FilterExpressionBuilder()
-//                                .ne("email", payloadDocument.getId()).build())
                 .query(text)
                 .similarityThreshold(properties.getSimilarityThreshold())
                 .build();
