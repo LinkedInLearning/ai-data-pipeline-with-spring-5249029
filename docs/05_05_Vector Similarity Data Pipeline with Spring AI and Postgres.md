@@ -61,6 +61,11 @@ docker run --rm --name postgresml \
 ```
 
 
+```sql
+CREATE EXTENSION vector;
+```
+
+
 Here is an example similar search of a perfect match between 2 identical vectors
 
 ```sql
@@ -123,6 +128,8 @@ Start Sink
 ```shell
 java -jar applications/sinks/postgres-sink/target/postgres-sink-0.0.1-SNAPSHOT.jar --spring.datasource.username=postgres  --spring.datasource.password=postgres --spring.datasource.driverClassName=org.postgresql.Driver --spring.datasource.url="jdbc:postgresql://localhost/postgres"  --spring.cloud.stream.bindings.input.destination="customers.similarities.output" --spring.config.import=optional:file://$PWD/applications/sinks/postgres-sink/src/main/resources/postgres-similarity.yml --spring.cloud.stream.bindings.input.group=postgres-sink
 ```
+
+See [postgres-similarity.yml](../applications/sinks/postgres-sink/src/main/resources/postgres-similarity.yml)
 
 ```shell
 curl -X 'POST' \
