@@ -147,22 +147,18 @@ VALUES ('[1,2,3]'), ('[4,5,6]');
 
 ```
 
-This is a very basic Postgres vector database search that  determines the distance between a number and an embedding. The distance is calculated based on the law of cosines
+This is a very basic Postgres vector database search that  determines the distance 
+between a provided embedding and the embedding value in the items table.
+The similarity is calculated based on the law of cosines.
+Cosine similarity is typically a value between -1 and 1. 1 is perfect match.
+You subtract 1 to convert the cosine similarity to the distance.
+
 
 ```sql
 SELECT 1 - (embedding <=> '[3,1,2]') 
 AS cosine_similarity 
 FROM items;
-
 ```
-
-Drop so it be recreated by Spring AI (if created)
-
-```sql
-drop table vector_store;
-```
-
-
 
 Start Http
 
@@ -185,15 +181,31 @@ Start Processor Text sentiment RAG
 java -jar applications/processors/ai-sentiment-rag-processor/target/ai-sentiment-rag-processor-0.0.1-SNAPSHOT.jar --spring.cloud.stream.bindings.input.destination=customers.output.feedback.summary --spring.cloud.stream.bindings.output.destination=customers.output.feedback.sentiment --spring.datasource.username=postgres --spring.datasource.password=postgres --spring.datasource.driverClassName=org.postgresql.Driver --spring.datasource.url="jdbc:postgresql://localhost:6432/postgresml" 
 ```
 
+
+
+
+
 See [CustomerFeedbackSentimentProcessor.java](../applications/processors/ai-sentiment-rag-processor/src/main/java/ai/data/pipeline/sentiment/processor/CustomerFeedbackSentimentProcessor.java)
+- Here the customer feedback processor accepts a CustomerFeedback object
+  and returns teh FeedbackSentiment.
+- the prompt will ask the Model to determine the sentiment
+- The summary of the feedback is passed in at runtime
+- Spring AI converts the response to the Sentiment enum
+- What is different here is the advisor, is 
+- I added an additional maven dependency to this processor
+
 
 See [pom.xml](../applications/processors/ai-sentiment-rag-processor/pom.xml)
+- This now has the **spring-ai-advisors-vector-store** which add the ability to use a vector database
+- **spring-ai-starter-vector-store-pgvector** using Postgres with the pgvector extension that is part of PostgresML
+- Now I am also using RAG
 
 See [VectorStoreConfig.java](../applications/processors/ai-sentiment-rag-processor/src/main/java/ai/data/pipeline/sentiment/VectorStoreConfig.java)
+- the CommandLineRunner is executed when the application is started.
+- It will load records into the vector database
 
-
-
-
+See [sentiment_rag_content.txt](../applications/processors/ai-sentiment-rag-processor/src/main/resources/sentiment_rag_content.txt)
+- this content is loaded to better detect sarcastic negative statements
 
 Start Sink
 

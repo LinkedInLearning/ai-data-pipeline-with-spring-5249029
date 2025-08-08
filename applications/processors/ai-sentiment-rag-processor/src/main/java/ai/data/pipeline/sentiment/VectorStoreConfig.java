@@ -19,6 +19,16 @@ public class VectorStoreConfig {
     @Value("classpath:sentiment_rag_content.txt")
     private Resource resource;
 
+
+    @Bean
+    CommandLineRunner runner(VectorStore vectorStore, List<Document> documents){
+        return args -> {
+
+            log.info("Documents: {}",documents);
+            vectorStore.accept(documents);
+        };
+    }
+
     @Bean
     List<Document> loadJsonAsDocuments() {
         var reader = new TextReader(this.resource);
@@ -30,12 +40,5 @@ public class VectorStoreConfig {
         return new QuestionAnswerAdvisor(vectorStore);
     }
 
-    @Bean
-    CommandLineRunner runner(VectorStore vectorStore, List<Document> documents){
-        return args -> {
 
-            log.info("Documents: {}",documents);
-            vectorStore.accept(documents);
-        };
-    }
 }
