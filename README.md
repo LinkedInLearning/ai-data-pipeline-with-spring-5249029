@@ -3,6 +3,10 @@ This is the repository for the LinkedIn Learning course `AI Data Pipeline with S
 
 ![lil-thumbnail-url]
 
+## Course Description
+
+The lack of data integration is a common blocker preventing organizations from unlocking the power of artificial intelligence. Spring is a popular collection of projects that simplifies data integration and artificial intelligence development for Java applications. In this course, learn how Spring can be used to build data pipelines. Discover how Spring AI makes it easy to use AI models using the Java programming language. Understand how to build data pipelines with Spring Batch and Spring Cloud Streams with RabbitMQ Learn how features within Postgres enable vector databases and machine learning for AI workloads.
+
 
 ## Instructions
 
@@ -48,4 +52,8 @@ Check out my other courses on [LinkedIn Learning](https://www.linkedin.com/learn
 - [Data Resilience with Spring and RabbitMQ Event Streaming](https://www.linkedin.com/learning/data-resilience-with-spring-and-rabbitmq-event-streaming/introduction-to-data-resiliency)
 - [Building High-Throughput Data Microservices](https://www.linkedin.com/learning/building-high-throughput-data-microservices/rabbitmq-streams-for-high-throughput)
 - [Achieving Low-Latency Data with Edge Computing](https://www.linkedin.com/learning/achieving-low-latency-data-with-edge-computing/why-is-low-latency-data-with-edge-computing-important)
+
+
+[lil-course-url]: https://www.linkedin.com/learning/ai-data-pipelines-with-spring
+[lil-thumbnail-url]: https://media.licdn.com/dms/image/v2/D4E0DAQGio63WPKbMnQ/learning-public-crop_675_1200/B4EZkQl6HzHEAY-/0/1756919997682?e=2147483647&v=beta&t=ZEaakiNHX7JUx5-DF201T53bjSragjmGN8k7wEJuozA
 
